@@ -1,17 +1,16 @@
-# Initialisation du tableau
+# Initialisation du tableau avec des ennemis (E) à des positions fixes
 plateau = [
     ['.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.'],
+    ['.', '.', 'E', '.', '.'],
     ['.', '.', 'J', '.', '.'],
-    ['.', '.', '.', '.', '.'],
+    ['.', '.', '.', 'E', '.'],
     ['.', '.', '.', '.', '.']
 ]
+
 def afficher_plateau(plateau):
-    # Affichage du tableau
+    """Affichage du tableau."""
     for ligne in plateau:
         print(' '.join(ligne))
-
-
 
 def deplacer_joueur(plateau, direction):
     """Déplace le joueur dans la direction indiquée (haut, bas, gauche, droite)."""
@@ -21,13 +20,13 @@ def deplacer_joueur(plateau, direction):
             x, y = i, ligne.index('J')
             break
     else:
-        # Si le joueur n'est pas trouvé sur le plateau
         print("Erreur : joueur non trouvé sur le plateau.")
         return
 
     # Définir la nouvelle position par défaut
     nouveau_x, nouveau_y = x, y
-  # Déterminer la nouvelle position en fonction de la direction
+
+    # Déterminer la nouvelle position en fonction de la direction
     if direction == 'haut' and x > 0:
         nouveau_x = x - 1
     elif direction == 'bas' and x < len(plateau) - 1:
@@ -39,6 +38,11 @@ def deplacer_joueur(plateau, direction):
     else:
         print("Déplacement impossible.")
         return
+
+    # Vérifier si la nouvelle position est occupée par un ennemi
+    if plateau[nouveau_x][nouveau_y] == 'E':
+        print("Vous avez rencontré un ennemi ! Partie perdue.")
+        exit()  # Arrête le programme
 
     # Déplacer le joueur vers la nouvelle position
     plateau[x][y] = '.'  # Efface l'ancienne position
