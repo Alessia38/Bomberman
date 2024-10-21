@@ -1,7 +1,7 @@
 # Initialisation du tableau avec des ennemis (E) à des positions fixes
 plateau = [
     ['.', '.', '.', '.', '.'],
-    ['.', '.', 'E', '.', '.'],
+    ['.', '.', 'E', 'B', '.'],
     ['.', '.', 'J', '.', '.'],
     ['.', '.', '.', 'E', '.'],
     ['.', '.', '.', '.', '.']
