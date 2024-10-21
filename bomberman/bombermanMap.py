@@ -1,16 +1,15 @@
 # Initialisation du tableau
 plateau = [
     ['.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.'],
+    ['.', '.', '.', 'B', '.'],
     ['.', '.', 'J', '.', '.'],
-    ['.', '.', '.', '.', '.'],
+    ['.', '.', 'E', '.', '.'],
     ['.', '.', '.', '.', '.']
 ]
 def afficher_plateau(plateau):
     # Affichage du tableau
     for ligne in plateau:
         print(' '.join(ligne))
-
 
 
 def deplacer_joueur(plateau, direction):
@@ -39,11 +38,17 @@ def deplacer_joueur(plateau, direction):
     else:
         print("Déplacement impossible.")
         return
-
+    
+    if plateau[nouveau_x][nouveau_y] == 'B':
+        print("Vous avez rencontré un mur ! ")
+        return
+    if plateau[nouveau_x][nouveau_y] == 'E':
+        print("Vous avez rencontré un ennemi ! ")
+        exit()
     # Déplacer le joueur vers la nouvelle position
     plateau[x][y] = '.'  # Efface l'ancienne position
     plateau[nouveau_x][nouveau_y] = 'J'  # Place le joueur dans la nouvelle position
-
+   
 
 # Boucle interactive pour déplacer le joueur
 while True:
