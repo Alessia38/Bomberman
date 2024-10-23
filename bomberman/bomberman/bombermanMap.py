@@ -9,13 +9,19 @@ plateau = [
     ['.', '.', '.', '.', '.']
 ]
 
-def afficher_plateau(plateau):
-    """Affichage du tableau."""
+# Initialisation du score
+score_initial = 100  # Score de départ
+score = score_initial
+
+def afficher_plateau(plateau, score):
+    """Affichage du tableau et du score."""
+    print(f"Score: {score}")
     for ligne in plateau:
         print(' '.join(ligne))
 
 def deplacer_joueur(plateau, direction):
     """Déplace le joueur dans la direction indiquée (haut, bas, gauche, droite)."""
+    global score  # Accéder à la variable de score globale
     # Trouver la position actuelle du joueur
     for i, ligne in enumerate(plateau):
         if 'J' in ligne:
@@ -54,11 +60,14 @@ def deplacer_joueur(plateau, direction):
     plateau[x][y] = '.'  # Efface l'ancienne position
     plateau[nouveau_x][nouveau_y] = 'J'  # Place le joueur dans la nouvelle position
 
+    # Déduire des points pour chaque déplacement
+    score -= 5  # Par exemple, chaque déplacement coûte 5 points
+
 def poser_bombe(plateau, position_joueur):
     """Pose une bombe à la position actuelle du joueur."""
     x, y = position_joueur
     plateau[x][y] = 'O'  # Placer une bombe (symbole 'O' sur la case du joueur)
-    afficher_plateau(plateau)
+    afficher_plateau(plateau, score)
 
     # Simuler un délai avant l'explosion
     print("Bombe posée. Explosion dans 2 secondes...")
@@ -74,10 +83,13 @@ def explosion(plateau, x, y):
     """Gère l'explosion de la bombe : détruit les ennemis et les briques cassables."""
     def detruire_case(px, py):
         """Détruire une case si elle contient un ennemi ou une brique cassable."""
+        global score  # Accéder à la variable de score globale
         if plateau[px][py] == 'E':
             print("Un ennemi a été détruit à la position", (px, py))
+            score += 10  # Ajouter des points pour chaque ennemi détruit
         elif plateau[px][py] == 'B':
             print("Une brique cassable a été détruite à la position", (px, py))
+            score += 5  # Ajouter des points pour chaque brique détruite
         plateau[px][py] = '.'  # Vider la case après destruction
 
     # Explosion sur 1 case à gauche, droite, haut, bas
@@ -92,11 +104,11 @@ def explosion(plateau, x, y):
 
     # Vider la case de la bombe après l'explosion
     plateau[x][y] = '.'
-    afficher_plateau(plateau)
+    afficher_plateau(plateau, score)
 
 # Boucle interactive pour déplacer le joueur et poser des bombes
 while True:
-    afficher_plateau(plateau)  # Affiche le plateau actuel
+    afficher_plateau(plateau, score)  # Affiche le plateau actuel et le score
     action = input("\nEntrez une direction (haut, bas, gauche, droite), 'bombe' pour poser une bombe, ou 'q' pour quitter : ").lower()
 
     # Trouver la position actuelle du joueur
@@ -106,7 +118,7 @@ while True:
             break
 
     if action == 'q':  # Permet à l'utilisateur de quitter la boucle
-        print("Fin du jeu.")
+        print(f"Fin du jeu. Score final: {score}")
         break
     elif action in ['haut', 'bas', 'gauche', 'droite']:
         deplacer_joueur(plateau, action)  # Déplace le joueur dans la direction choisie
