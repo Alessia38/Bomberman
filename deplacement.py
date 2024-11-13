@@ -1,7 +1,8 @@
 from random import randint
 import time
-import afficher_plateau # type: ignore
-
+from affichage import afficher_plateau 
+from variables_globales import score
+import variables_globales
 def deplacer_ennemi(plateau):
     directions = ['haut', 'bas', 'gauche', 'droite']
 # Chercher tous les ennemis sur le plateau
@@ -30,8 +31,8 @@ def deplacer_ennemi(plateau):
             plateau[nouveau_x][nouveau_y] = 'E'  # Déplace l'ennemi à la nouvelle position
 
 def deplacer_joueur(plateau, direction):
-
     """Déplace le joueur dans la direction indiquée (haut, bas, gauche, droite)."""
+    variables_globales.score -= 5  # Déduit des points pour chaque déplacement
     # Trouver la position actuelle du joueur
     for i, ligne in enumerate(plateau):
         if 'J' in ligne:
@@ -68,12 +69,14 @@ def deplacer_joueur(plateau, direction):
     # Déplacer le joueur vers la nouvelle position
     plateau[x][y] = '.'  # Efface l'ancienne position
     plateau[nouveau_x][nouveau_y] = 'J'  # Place le joueur dans la nouvelle position
+    # Déduit des points pour chaque déplacement
+    variables_globales.score -= 5
 
 def poser_bombe(plateau, position_joueur):
     """Pose une bombe à la position actuelle du joueur."""
     x, y = position_joueur
     plateau[x][y] = 'O'  # Placer une bombe (symbole 'O' sur la case du joueur)
-    afficher_plateau(plateau)
+    afficher_plateau(plateau, variables_globales.score)
 
     # Simuler un délai avant l'explosion
     print("Bombe posée. Explosion dans 2 secondes...")
@@ -91,8 +94,10 @@ def explosion(plateau, x, y):
         """Détruire une case si elle contient un ennemi ou une brique cassable."""
         if plateau[px][py] == 'E':
             print("Un ennemi a été détruit à la position", (px, py))
+            variables_globales.score += 10 # Ajouter des points pour chaque ennemi détruit
         elif plateau[px][py] == 'B':
             print("Une brique cassable a été détruite à la position", (px, py))
+            variables_globales.score += 5 # Ajouter des points pour chaque brique détruite
         plateau[px][py] = '.'  # Vider la case après destruction
 
     # Explosion sur 1 case à gauche, droite, haut, bas
@@ -107,4 +112,4 @@ def explosion(plateau, x, y):
 
     # Vider la case de la bombe après l'explosion
     plateau[x][y] = '.'
-    afficher_plateau(plateau)
+    afficher_plateau(plateau, variables_globales.score)
